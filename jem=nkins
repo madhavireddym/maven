@@ -1,0 +1,30 @@
+node
+{
+    stage('continuos download')
+    {
+       git 'https://github.com/madhavireddym/maven.git' 
+    
+    }
+    stage('continuos build')
+    {
+      sh 'mvn package'  
+    }
+    
+    stage('continuos deployment')
+    
+    {
+    
+     deploy adapters: [tomcat9(credentialsId: '0f8c942d-41fb-41b6-a88e-f2fddc8aee00', path: '', url: 'http://172.31.30.73:8080')], contextPath: 'test', war: '**/*.war'
+    }
+    stage('continuos testing')
+    {
+     git 'https://github.com/madhavireddym/FunctionalTesting.git'   
+    }
+     stage('continuos delivary')
+    
+    {
+    
+     deploy adapters: [tomcat9(credentialsId: '0f8c942d-41fb-41b6-a88e-f2fddc8aee00', path: '', url: 'http://172.31.26.19:8080')], contextPath: 'test', war: '**/*.war'
+    }
+    
+}
